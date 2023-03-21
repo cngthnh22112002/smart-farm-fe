@@ -36,3 +36,119 @@
     transform: rotate(360deg);
   }
 }
+
+header{
+  height: 100px;
+}
+.header{
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  /* border-bottom: solid ; */
+}
+.header h1{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo{
+  display: flex;
+  width: 70%;
+}
+.logo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-top: 8.5px;
+  margin-left: 10px;
+}
+.icon1{
+  display: flex;
+  flex-direction: row;
+  width: 30%;
+  align-items: center;
+  justify-content: center;
+}
+.icon1 i {
+  margin: 10px;
+}
+.icon1 h6{
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+}
+
+.rectangle{
+  width: 10%;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  background-color: #D4FFF0;
+  border-radius: 5%;
+}
+.navbar{
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  align-items: center;
+  justify-content: center;
+}
+.ele{
+  height: 70px;
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+ 
+}
+.ele .bi{
+  width: 30%;
+  font-size: 20px;
+}
+.ele h6{
+  width: 70%;
+  text-align: center;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content1 {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+}
+.title {
+  display: flex;
+  flex-direction: row;
+}
+.title2 {
+  width: 20px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.enviroment {
+  display: flex;
+  flex-direction: row;
+}
+.equip {
+  display: flex;
+  flex-direction: row;
+}
+.col p{
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
