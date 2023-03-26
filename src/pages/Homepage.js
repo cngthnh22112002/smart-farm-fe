@@ -29,53 +29,51 @@ export default function Homepage() {
 
   return (
 <>
-      <div className="title" style={{ marginLeft: 30, height: 50, marginBottom: 30 }}>
-        <div style={{ width: "80%", margin: 0, textAlign: "left"}}>
-          <h1>Home Page</h1>
-        </div>
-        <div className="title_2" style={{ height: 50 }}>
-          <div id="current-h">{curDate.getHours()} : {curDate.getMinutes()}</div>
-          <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
-        </div>
-      </div>
-      <div className="container px-4">
-        <div className="row gx-5">
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Air temperature</p>
-              <p>{temperature_sensor} ℃</p>
-            </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Air humidity</p>
-              <p>{humidity_sensor} %</p>
-            </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Light</p>
-              <p>{light_sensor} Cd</p>
-            </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Soil moisture</p>
-              <p>{soilmoisture_sensor} %</p>
-            </div>
-          </div>
+  <div className="title" style={{ marginLeft: 30, height: 50, marginBottom: 30 }}>
+    <div style={{ width: "80%", margin: 0, textAlign: "left"}}>
+      <h1>Home Page</h1>
+    </div>
+    <div className="title_2" style={{ height: 50 }}>
+      <div id="current-h">{curDate.getHours()} : {curDate.getMinutes()}</div>
+      <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
+    </div>
+  </div>
+  <div className="container px-4">
+    <div className="row gx-5">
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
+          <p>Air temperature</p>
+          <p>{temperature_sensor} ℃</p>
         </div>
       </div>
-      <div className="equip">
-        <div>
-          <img src="logo192.png" alt="img1" style={{witch: "100%"}}/>
-        </div>
-        <div>
-          <img src="logo192.png" alt="img2" style={{witch: "10%"}}/>
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
+          <p>Air humidity</p>
+          <p>{humidity_sensor} %</p>
         </div>
       </div>
-
-  
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
+          <p>Light</p>
+          <p>{light_sensor} Cd</p>
+        </div>
+      </div>
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem"}}>
+          <p>Soil moisture</p>
+          <p>{soilmoisture_sensor} %</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="equip">
+    <div>
+      <img src="logo192.png" alt="img1" style={{witch: "100%"}}/>
+    </div>
+    <div>
+      <img src="logo192.png" alt="img2" style={{witch: "10%"}}/>
+    </div>
+  </div>
 </>
 
   );

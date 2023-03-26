@@ -33,6 +33,7 @@ function App() {
         <Navbar />
         <div className="container">
           <Routes>
+            <Route path="/" element={<Homepage />} />
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/light" element={<Light />} />
             <Route path="/fan" element={<Fan />} />
