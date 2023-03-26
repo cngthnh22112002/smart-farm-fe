@@ -1,37 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import Navbar from "./Navbar"
+import Homepage from "./pages/Homepage"
+import Fan from "./pages/Fan"
+import Light from "./pages/Light"
+import Pump from "./pages/Pump"
+import Chart from "./pages/Chart"
+import Growth from "./pages/Growth"
+import Chat from "./pages/Chat"
+import './App.css';
+import "./styles.css"
 
-const socket = io('http://localhost:5000');
+import React from "react"
+import { Route, Routes } from "react-router-dom"
 
 function App() {
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
-
-  useEffect(() => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-  }, []);
-
   return (
-    <div>
-      <p>Message from light_sensor: {light_sensor}</p>
-      <p>Message from soilmoisture_sensor: {soilmoisture_sensor}</p>
-      <p>Message from humidity_sensor: {humidity_sensor}</p>
-      <p>Message from temperature_sensor: {temperature_sensor}</p>
-    </div>
-  );
+    <>
+      <header>
+        <div className="header">
+          <div className="logo">
+            <img src="logoyolofarm.png" alt="logo"/>
+            <h1>Yolo Farm</h1>
+          </div>
+          <div className="icon1">
+            <i className="bi bi-question-circle" />
+            <i className="bi bi-gear" />
+            <i className="bi bi-bell" />
+            <h6>Hello, User</h6>
+            <i className="bi bi-person" style={{ fontSize: "110%" }} />
+          </div>
+        </div>
+      </header>
+      <div className="body">
+        <Navbar />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/light" element={<Light />} />
+            <Route path="/fan" element={<Fan />} />
+            <Route path="/pump" element={<Pump />} />
+            <Route path="/chart" element={<Chart />} />
+            <Route path="/growth" element={<Growth />} />
+            <Route path="/chat" element={<Chat />} />
+          </Routes>
+        </div>
+      </div>
+    </>
+  )
 }
 
-export default App;
+export default App
