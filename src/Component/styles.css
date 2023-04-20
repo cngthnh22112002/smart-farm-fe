@@ -15,7 +15,7 @@
   
   .nav {
     /* background-color: #333; */
-    color: white;
+    color: rgb(0, 0, 0);
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -48,12 +48,18 @@
     padding: .25rem;
   }
   
-  .nav li.active {
-    background-color: #555;
+  .nav li.active * {
+    background-color: #719dd8;
+    border-radius: 5px;
   }
   
   .nav li:hover {
-    background-color: #777;
+    background-color: #afc3dd;
+    border-radius: 5px;
+  }
+
+  .nav img {
+    margin-right: 5px;
   }
 
   .logo {
@@ -63,7 +69,7 @@
     display: flex
   }
   .logo h4 {
-    color: #fff;
+    color: #000000;
     display: flex;
     align-items: center;
     margin-top: 10px;

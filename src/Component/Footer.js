@@ -35,16 +35,16 @@ const Footer = () => {
                 <div className="footer-logo mb-3" />
                 <p>This is a website integrated with the yolo farm system, developed by a group of BK students for the purpose of passing a multidisciplinary project.</p>
                 <div className="footer_social_area">
-                  <a href="#" data-toggle="tooltip" data-placement="top" title data-original-title="Facebook">
+                  <a href='https://www.facebook.com/' target="_blank" data-toggle="tooltip" data-placement="top" title data-original-title="Facebook">
                     <i className="fa fa-facebook" />
                   </a>
-                  <a href="#" data-toggle="tooltip" data-placement="top" title data-original-title="Pinterest">
+                  <a href="https://www.pinterest.com/" data-toggle="tooltip" data-placement="top" title data-original-title="Pinterest">
                     <i className="fa fa-pinterest" />
                   </a>
-                  <a href="#" data-toggle="tooltip" data-placement="top" title data-original-title="Skype">
+                  <a href="https://www.skype.com/" target="_blank" data-toggle="tooltip" data-placement="top" title data-original-title="Skype">
                     <i className="fa fa-skype" />
                   </a>
-                  <a href="#" data-toggle="tooltip" data-placement="top" title data-original-title="Twitter">
+                  <a href="https://twitter.com/" target="_blank" data-toggle="tooltip" data-placement="top" title data-original-title="Twitter">
                     <i className="fa fa-twitter" />
                   </a>
                 </div>
