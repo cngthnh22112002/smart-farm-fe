@@ -1,37 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import { NavLink, useNavigate, Router } from 'react-router-dom';
+import Login from "./Component/Login/Login"
+// import Register from "./Component/Register/Register"
+import ProtectedRoutes from "./Component/ProtectedRoutes.js"
+// import ProtectedRoute from "./utils/ProtectedRoute"
+import React from "react"
+import Home from "./Component/Home/Home"
+import {  BrowserRouter, Route, Routes } from "react-router-dom"
+import {Navigate} from "react-router"
 
-const socket = io('http://localhost:5000');
 
 function App() {
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
-
-  useEffect(() => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-  }, []);
-
   return (
-    <div>
-      <p>Message from light_sensor: {light_sensor}</p>
-      <p>Message from soilmoisture_sensor: {soilmoisture_sensor}</p>
-      <p>Message from humidity_sensor: {humidity_sensor}</p>
-      <p>Message from temperature_sensor: {temperature_sensor}</p>
-    </div>
+      <div>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route element = {<ProtectedRoutes/>}>
+            <Route path="/home" element={<Home />} />
+          </Route> 
+          
+        </Routes>
+      </div>
   );
 }
 
-export default App;
+export default App
