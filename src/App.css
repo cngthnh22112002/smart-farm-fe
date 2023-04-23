@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+header{
+  height: 70px;
+}
+.header{
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  /* border-bottom: solid ; */
+}
+.header h1{
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.icon1{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.icon1 i {
+  margin: 10px;
+}
+.icon1 h6{
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+}
