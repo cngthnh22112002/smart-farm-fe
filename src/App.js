@@ -1,37 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000');
+import { NavLink, useNavigate, Router } from 'react-router-dom';
+import Login from "./Component/Login/Login"
+// import Register from "./Component/Register/Register"
+import ProtectedRoutes from "./Component/ProtectedRoutes.js"
+// import ProtectedRoute from "./utils/ProtectedRoute"
+import React from "react"
+import Home from "./Component/Home/Home"
+import {  BrowserRouter, Route, Routes } from "react-router-dom"
+import {Navigate} from "react-router"
+import Navbar from "./Component/Navbar"
+import Footer from "./Component/Footer"
+import Homepage from "./pages/homepage/Homepage"
+import Fan from "./pages/Fan/Fan"
+import Light from "./pages/Light/Light"
+import Pump from "./pages/Pump/Pump"
+// import Chart from "./pages/Chart/Chart"
+import Growth from "./pages/Growth/Growth"
+import Profile from "./pages/profile/profile"
+import { ChartDayly } from "./pages/Chart/chartdayly"
+import { ChartWeekly } from "./pages/Chart/chartweekly"
+import { ChartAll } from "./pages/Chart/chartall"
+import Register from './Component/Register/Register';
+import Notify from './Component/Notification/Notify';
+import NotifyToday from './Component/Notification/NotifyToday';
+import NotifyAll from './Component/Notification/NotifyAll';
+import './App.css';
+import "./Component/styles.css"
+// import { NavLink, useNavigate } from 'react-router-dom';
 
 function App() {
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
-
-  useEffect(() => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-  }, []);
-
   return (
-    <div>
-      <p>Message from light_sensor: {light_sensor}</p>
-      <p>Message from soilmoisture_sensor: {soilmoisture_sensor}</p>
-      <p>Message from humidity_sensor: {humidity_sensor}</p>
-      <p>Message from temperature_sensor: {temperature_sensor}</p>
-    </div>
+      <div>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route element = {<ProtectedRoutes/>}> 
+                <Route path="/home" element={<Home />} />
+                <Route path="/homepage" element={<Homepage />} />
+                <Route path="/light" element={<Light />} />
+                <Route path="/fan" element={<Fan />} />
+                <Route path="/pump" element={<Pump />} />
+                <Route path="/chart/dayly" element={<ChartDayly />}></Route>
+                <Route path="/chart/weekly" element={<ChartWeekly />}></Route>
+                <Route path="/chart/all" element={<ChartAll />}></Route>
+                <Route path="/growth" element={<Growth />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/notify" element={<Notify  />} />
+                <Route path="/notify/all" element={<NotifyAll  />} />
+                <Route path="/notify/today" element={<NotifyToday  />} />
+          </Route>
+        </Routes>
+      </div>
   );
 }
 
-export default App;
+export default App
