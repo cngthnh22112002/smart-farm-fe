@@ -34,7 +34,7 @@ export default function Light() {
     setGardenList(resjson)
 
     // kết nối vườn đầu tiên khi mới vào trang
-    var urlconnect = 'http://localhost:5000/bridge/connect?gardenId=' + resjson[0]._id
+    var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + resjson[0]._id
     let temp = await fetch(urlconnect, {
       method: 'GET',
       headers: {
@@ -86,7 +86,7 @@ export default function Light() {
       },
     })
     // connect new garden
-    var urlconnect = 'http://localhost:5000/bridge/connect?gardenId=' + gardenList[garden]._id
+    var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
     let temp2 = await fetch(urlconnect, {
       method: 'GET',
       headers: {
@@ -94,6 +94,23 @@ export default function Light() {
       },
     })
     getEnv()    // lấy lại thông tin môi trường
+  }
+
+  const handleAddLed = async () => {
+    var res = {
+      "gardenId": gardenList[garden]._id
+    }
+    console.log("res: ", res)
+    console.log("index: ", garden)
+    let temp = await fetch('http://localhost:5000/devices/pump', {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(res)
+    })
+    let resjson = await temp.json()
+    console.log("Response: ", resjson)
   }
 
   useEffect(() => {
@@ -118,7 +135,10 @@ export default function Light() {
                 <option key = {index} value = {index}>{t.name}</option>
               )}
             </select>
-            <button onClick={() => alert("This feature is not supported yet")}>
+            <button onClick={() => {
+              handleAddLed()
+              alert("Add success!")
+            }}>
               Add equipment
             </button>
           </div>
