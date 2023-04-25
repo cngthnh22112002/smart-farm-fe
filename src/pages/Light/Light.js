@@ -34,7 +34,7 @@ export default function Light() {
     setGardenList(resjson)
 
     // kết nối vườn đầu tiên khi mới vào trang
-    urlconnect = 'http://localhost:5000/bridge/connect?gardenId=' + garden[0]._id
+    var urlconnect = 'http://localhost:5000/bridge/connect?gardenId=' + resjson[0]._id
     let temp = await fetch(urlconnect, {
       method: 'GET',
       headers: {
@@ -75,10 +75,25 @@ export default function Light() {
   }
 
   // đổi vườn, lấy danh sách đèn tương ứng
-  const handleChooseGarden = (e) => {
+  const handleChooseGarden = async (e) => {
     setGarden(e.target.value)
     setLightList([...arrNull,gardenList[e.target.value].leds])
-    console.log(lightList)
+    // disconnect garden
+    let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    // connect new garden
+    var urlconnect = 'http://localhost:5000/bridge/connect?gardenId=' + gardenList[garden]._id
+    let temp2 = await fetch(urlconnect, {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    getEnv()    // lấy lại thông tin môi trường
   }
 
   useEffect(() => {
@@ -118,9 +133,8 @@ export default function Light() {
                     }></input>
                   </div>
                 </div>
-                {console.log("cc",lightList)}
                 {lightList[0].slice(1).map((t, index) => 
-                  <div className="col">
+                  <div className="col" id={t}>
                     <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
                       <p>Light {index + 1}</p>
                       <input type="checkbox" className="button" id="light" 
