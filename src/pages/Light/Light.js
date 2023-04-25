@@ -1,24 +1,122 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 import './Light.css';
+import { ObjectId } from 'mongoose';
 
 const socket = io('http://localhost:5000');
 
 var curDate = new Date();
 
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NDY3OSwiZXhwIjoxNjgyNjEzODc5fQ.E5dbIzY5tXQmaq2EwI8KIEgLgXtYaeqTjqLq-1sxvs0"
+
 export default function Light() {
-  
+  // 4 biến môi trường
   const [light_sensor, setLightSensor] = useState('');
   const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
   const [humidity_sensor, setHumiditySensor] = useState('');
   const [temperature_sensor, setTemperatureSensor] = useState('');
 
-  const [light1, setLight1] = React.useState(false);
-  const [light2, setLight2] = React.useState(false);
-  const [light3, setLight3] = React.useState(false);
-  const [light4, setLight4] = React.useState(false);
-  const [light5, setLight5] = React.useState(false);
-  const [light6, setLight6] = React.useState(false);
+  const [light, setLight] = React.useState(false)         // lưu trạng thái đèn
+  const [lightList, setLightList] = useState([[]])        // lưu danh sách đèn
+  const [gardenList, setGardenList] = React.useState([])  // lưu danh sách vườn
+  const [garden, setGarden] = useState("0")               // lưu index vườn đang chọn
+  const [arrNull, setArrNull] = React.useState([])        // mảng rỗng
+
+  const fetchData = async () => {
+    // lấy danh sách vườn
+    let res = await fetch('http://localhost:5000/gardens/all', {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    let resjson = await res.json()
+    console.log("gardens list: ", resjson)
+    setGardenList(resjson)
+
+    // lấy danh sách đèn vườn đầu
+    setLightList([...arrNull,resjson[0].leds])
+
+    // kết nối vườn đầu tiên khi mới vào trang
+    var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + resjson[0]._id
+    const temp = await fetch(urlconnect, {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    const aaa = {
+      "gardenId": "64454b60b056956abb73c2c9",
+      "ledId": "64454b60b056956abb73c2cc",
+      "fanId": "64454b60b056956abb73c2cf",
+      "pumpId": "64454b60b056956abb73c2d2"
+    }
+    const temp2 = await fetch('http://localhost:5000/bridge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      redirect: 'follow',
+      body: JSON.stringify(aaa)
+    })
+  }
+
+  // lấy lại thông tin môi trường lúc đổi vườn
+  // const getEnv = () => {
+  //   socket.close()
+  //   socket.on('light-sensor', (data) => {
+  //     setLightSensor(data);
+  //   });
+  //   socket.on('soilmoisture-sensor', (data) => {
+  //     setSoilmoistureSensor(data);
+  //   });
+  //   socket.on('humidity-sensor', (data) => {
+  //     setHumiditySensor(data);
+  //   });
+  //   socket.on('temperature-sensor', (data) => {
+  //     setTemperatureSensor(data);
+  //   });
+  //   socket.on('light', data => {setLight(data=="1" ? true : false);})
+  // }
+
+  // đổi vườn, lấy danh sách đèn tương ứng
+  const handleChooseGarden = async (e) => {
+    setGarden(e.target.value)
+    setLightList([...arrNull,gardenList[e.target.value].leds])
+    // // disconnect garden
+    // let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // // connect new garden
+    // var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
+    // let temp2 = await fetch(urlconnect, {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // getEnv()    // lấy lại thông tin môi trường
+  }
+
+  const handleAddLed = async () => {
+      const data = { gardenId: gardenList[garden]._id };
+      const response = await fetch('http://localhost:5000/devices/led', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        redirect: 'follow',
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log(result);
+    };
 
   useEffect(() => {
     socket.on('light-sensor', (data) => {
@@ -33,127 +131,97 @@ export default function Light() {
     socket.on('temperature-sensor', (data) => {
       setTemperatureSensor(data);
     });
-    socket.on('light', data => {setLight1(data==="ON" ? true : false);});
-    socket.on('light2', data => {setLight2(data==="ON" ? true : false);});
-    socket.on('light3', data => {setLight3(data==="ON" ? true : false);});
-    socket.on('light4', data => {setLight4(data==="ON" ? true : false);});
-    socket.on('light5', data => {setLight5(data==="ON" ? true : false);});
-    socket.on('light6', data => {setLight6(data==="ON" ? true : false);});
+    socket.on('led', data => {setLight(data=="1" ? true : false);})
+    
+    fetchData()
   }, []);
 
   return (
-<>
-  <div className="body">
-    <div className='col1'style={{width: "80%"}}>
-      <div className='equip'>
-        <div className="title">
-          <div style={{width: "80%", textAlign: "left", margin: "1rem" }}>
-            <h1>Light</h1>
+  <>
+    <div className="body">
+      <div className='col1'style={{width: "80%"}}>
+        <div className='equip'>
+          <div className="title">
+            <div style={{width: "60%", textAlign: "left", margin: "1rem" }}>
+              <h1>Light</h1>
+            </div>
+            <select 
+              value={garden}
+              onChange={(e) => handleChooseGarden(e)}
+              style={{width:'20%', margin:'1rem', borderRadius:'15px'}}>
+              <option disabled="disabled" value="null">--Chose garden--</option>
+              {gardenList.map((t, index) => 
+                <option key = {index} value = {index}>{t.name}</option>
+              )}
+            </select>
+            <button onClick={() => handleAddLed()}>
+              Add equipment
+            </button>
           </div>
-          <button onClick={() => alert("This feature is not supported yet")}>
-            Add equipment
-          </button>
-        </div>
-        <div className='body2'>
-          <div className="container px-4">
-            <div className="row gx-5">
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 1</p>
-                  <input type="checkbox" className="button" id="light1" checked={light1} onChange={
-                    () => {setLight1(!light1); (light1===true ? socket.emit("light", "OFF") : socket.emit("light", "ON"))}
-                  }></input>
+          <div className='body2'>
+            <div className="container px-4">
+              <div className="row gx-5">
+                <div className="col">
+                  <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                    <p>Light 1</p>
+                    <input type="checkbox" className="button" id="light" checked={light} onChange={
+                      () => {setLight(!light); (light===true ? socket.emit("led", "0") : socket.emit("led", "1"))}
+                    }></input>
+                  </div>
                 </div>
-              </div>
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 2</p>
-                  <input type="checkbox" className="button" id="light2" checked={light2} onChange={
-                    () => {setLight2(!light2); console.log("sent mess 2")}
-                  }></input>
-                </div> 
-              </div>
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 3</p>
-                  <input type="checkbox" className="button" id="light3" checked={light3} onChange={
-                    () => {setLight3(!light3); console.log("sent mess 3")}
-                  }></input>
-                </div>
-              </div>
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 4</p>
-                  <input type="checkbox" className="button" id="light4" checked={light4} onChange={
-                    () => {setLight4(!light4); console.log("sent mess 4")}
-                  }></input>
-                </div>
-              </div>
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 5</p>
-                  <input type="checkbox" className="button" id="light5" checked={light5} onChange={
-                    () => {setLight5(!light5); console.log("sent mess 5")}
-                  }></input>
-                </div>
-              </div>
-              <div className="col">
-                <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                  <p>Light 6</p>
-                  <input type="checkbox" className="button" id="light6" checked={light6} onChange={
-                    () => {setLight6(!light6); console.log("sent mess 6")}
-                  }></input>
-                </div>
+                {lightList[0].slice(1).map((t, index) => 
+                  <div className="col" id={t}>
+                    <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                      <p>Light {index + 2}</p>
+                      <input type="checkbox" className="button" id="light" 
+                        // checked={light}
+                        // onChange={
+                        //   () => {setLight(!light)}
+                        // }
+                      ></input>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div>
-        <p>Đống này để kiểm tra thôi đừng để ý</p>
-        <p>light1: {light1 === true ? 1 : 0 }  </p>
-        <p>light2: {light2 === true ? 1 : 0 }  </p>
-        <p>light3: {light3 === true ? 1 : 0 }  </p>
-        <p>light4: {light4 === true ? 1 : 0 }  </p>
-        <p>light5: {light5 === true ? 1 : 0 }  </p>
-        <p>light6: {light6 === true ? 1 : 0 }  </p>
-      </div>
-    </div>
-    <div className='col2'style={{width: "20%"}}>
-      <div className="datetime" style={{ height: 50 }}>
-        <div id="current-h">{curDate.getHours()} : {curDate.getMinutes()}</div>
-        <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
-      </div>
-      <div className="container px-4">
-        <div className="row gx-5">
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Air temperature</p>
-              <p>{temperature_sensor} ℃</p>
+      <div className='col2'style={{width: "20%"}}>
+        <div className="datetime" style={{ height: 50 }}>
+          <div id="current-h">{curDate.getHours()} : {curDate.getMinutes()}</div>
+          <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
+        </div>
+        <div className="container px-4">
+          <div className="row gx-5">
+            <div className="col">
+              <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                <p>Air temperature</p>
+                <p>{temperature_sensor} ℃</p>
+              </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Air humidity</p>
-              <p>{humidity_sensor} %</p>
+            <div className="col">
+              <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                <p>Air humidity</p>
+                <p>{humidity_sensor} %</p>
+              </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Light</p>
-              <p>{light_sensor} Cd</p>
+            <div className="col">
+              <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                <p>Light</p>
+                <p>{light_sensor} Cd</p>
+              </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-              <p>Soil moisture</p>
-              <p>{soilmoisture_sensor} %</p>
+            <div className="col">
+              <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
+                <p>Soil moisture</p>
+                <p>{soilmoisture_sensor} %</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</>
+  </>
   )
 }
