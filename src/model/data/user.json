@@ -1,0 +1,24 @@
+{
+    "data": [
+      {
+        "id": "100020003000",
+        "username": "AdminHuy",
+        "email": "theflash28012002@gmail.com",
+        "firstName": "Huy",
+        "lastName": "Duc",
+        "password": "123456789",
+        "birthDate": "28/01/2002",
+        "avatar": "http://genk.mediacdn.vn/k:thumb_w/640/2015/screen-shot-2015-07-30-at-2-31-57-pm-1438334096188/cau-chuyen-ve-nguoi-tao-ra-chu-ech-xanh-than-thanh.png"
+      },
+      {
+        "id": "100020003001",
+        "username": "bobby2202",
+        "email": "bobm@gmail.com",
+        "firstName": "Bob",
+        "lastName": "Mason",
+        "password": "mason",
+        "birthDate": "22/02/1985",
+        "avatar": "https://allaboutcats.com/wp-content/uploads/2022/01/Calico-Cats.jpg"
+      }
+    ]
+  }
