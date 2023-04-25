@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink } from "react-router-dom";
+// import {tokenVar} from '../Login/Login'
 
 function NotifyToday() {
   const [data, setData] = useState([]);
@@ -15,12 +16,16 @@ function NotifyToday() {
       const second = currentDate.getSeconds(); 
       return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
   };
-
+  
   useEffect(() => {
     // Get the token from your authentication system
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NzU3MywiZXhwIjoxNjgyNjE2NzczfQ.tenpKuH4IBTMeEBrfFmNhibiYovlkTev-IHDtlr-Cwo';
-    setToken(token);
-
+    // setToken(localStorage.getItem('token'))
+    // console.log(token)
+    // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjI1NjgwOSwiZXhwIjoxNjgyNTE2MDA5fQ.dFQ8GJ3x-R0Tb4HgP72BqyrzfBYR3iZxyjulbZcW7Ik';
+    //const token = tokenVar;
+    // setToken(token);
+    // alert(token)
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDZiYjAwYTMxYTdkMTBhYjQ3MzAyYSIsImlhdCI6MTY4MjQ0MDY3MCwiZXhwIjoxNjgyNjk5ODcwfQ.bWPBq0JMC9tiV7u98NGt4wPo_xSEnHbxi5w47QwLb_I";
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/notification/today', {
@@ -41,7 +46,9 @@ function NotifyToday() {
         <div className='title'>
             <div className='left-div'>
                 <h1>Notification</h1>
+                <p>{token}</p>
             </div>
+           
             <div className='right-div'>
                 <NavLink to='/notify/today' className='navlink-truck navlink-truck-1'>
                     <div className='navlink-truck-container-1'>

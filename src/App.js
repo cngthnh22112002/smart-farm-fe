@@ -1,14 +1,13 @@
 import { NavLink, useNavigate, Router } from 'react-router-dom';
 import Login from "./Component/Login/Login"
 // import Register from "./Component/Register/Register"
-import ProtectedRoutes from "./Component/ProtectedRoutes.js"
 // import ProtectedRoute from "./utils/ProtectedRoute"
 import React from "react"
 import Home from "./Component/Home/Home"
 import {  BrowserRouter, Route, Routes } from "react-router-dom"
-import {Navigate} from "react-router"
-import Navbar from "./Component/Navbar"
-import Footer from "./Component/Footer"
+// import {Navigate} from "react-router"
+// import Navbar from "./Component/Navbar"
+// import Footer from "./Component/Footer"
 import Homepage from "./pages/homepage/Homepage"
 import Fan from "./pages/Fan/Fan"
 import Light from "./pages/Light/Light"
@@ -23,6 +22,7 @@ import Register from './Component/Register/Register';
 import Notify from './Component/Notification/Notify';
 import NotifyToday from './Component/Notification/NotifyToday';
 import NotifyAll from './Component/Notification/NotifyAll';
+import ProtectedRoutes from './Component/ProtectedRoutes.js';
 import './App.css';
 import "./Component/styles.css"
 // import { NavLink, useNavigate } from 'react-router-dom';

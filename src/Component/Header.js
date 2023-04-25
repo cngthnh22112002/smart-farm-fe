@@ -1,7 +1,31 @@
 import React, { useState, useEffect }  from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.css'
+import Profile from './../pages/profile/profile'
+import axios from 'axios'
 const Header = () => {
+  const [data, setData] = useState([]);
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    // Get the token from your authentication system
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NzU3MywiZXhwIjoxNjgyNjE2NzczfQ.tenpKuH4IBTMeEBrfFmNhibiYovlkTev-IHDtlr-Cwo';
+    setToken(token);
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [isHover, setIsHover] = useState(false);
 
   const handleMouseEnter = () => {
@@ -56,7 +80,7 @@ const Header = () => {
                   </div>
                 </div>
               </li> */}
-              <h6>Hello, User</h6>
+              <h6>Hello, {data.name}</h6>
               <NavLink to="/profile">
                 <i className="bi bi-person" style={{ fontSize: "110%", color:"black" }} />
               </NavLink>

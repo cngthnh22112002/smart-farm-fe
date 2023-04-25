@@ -26,7 +26,10 @@ function Login() {
             console.log(res.data);
             alert('Login successfully!');
             const { token } = res.data;
-            setToken(token);
+            // console.log(token);
+            // tokenVar = setToken(token);
+            localStorage.setItem('token', token);
+            // console.log(tokenVar);
             navigate('/homepage')
             console.log("OK");
         })

@@ -9,7 +9,7 @@ function NotifyAll() {
     const currentDate = new Date();
     const day = currentDate.getDate(); 
     const month = currentDate.getMonth() + 1; 
-    const year = currentDate.getFullYear(); // Lấy năm
+    const year = currentDate.getFullYear();
     const hour = currentDate.getHours(); 
     const minute = currentDate.getMinutes(); 
     const second = currentDate.getSeconds(); 
@@ -17,12 +17,12 @@ function NotifyAll() {
 };
   useEffect(() => {
     // Get the token from your authentication system
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NzU3MywiZXhwIjoxNjgyNjE2NzczfQ.tenpKuH4IBTMeEBrfFmNhibiYovlkTev-IHDtlr-Cwo';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjMyNDU2MywiZXhwIjoxNjgyNTgzNzYzfQ.2RRqL8j5FTv0rfmHDcw-4Leqfn1WEjvY4aODBNAKXV4';
     setToken(token);
-
-    const fetchData = async (limit) => {
+    let limit = 200;
+    const fetchData = async (limit)=> {
       try {
-        const response = await axios.get(`http://localhost:5000/notification/all?limit=${limit}`, {
+        const response = await axios.get(`http://localhost:5000/notification/all?limit=15`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

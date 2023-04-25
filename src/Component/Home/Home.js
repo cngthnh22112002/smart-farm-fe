@@ -1,10 +1,8 @@
 import Navbar from "./../Navbar.js"
 import Footer from "./../Footer"
-// import Header from "D:/DADN-HTTT/FrontEnd/smartfarmfe/src/Component/Header.js"
 import Homepage from "../../pages/homepage/Homepage.js"
 import Fan from "../../pages/Fan/Fan.js"
 import Light from "../../pages/Light/Light.js"
-//import Pump from "D:/DADN-HTTT/FrontEnd/smartfarmfe/src/pages/Pump/Pump.js"
 import Pump from "../../pages/Pump/Pump"
 import Growth from "../../pages/Growth/Growth"
 import Profile from "../../pages/profile/profile"
@@ -16,23 +14,46 @@ import { ChartWeekly } from "../../pages/Chart/chartweekly.js"
 import { ChartAll } from "../../pages/Chart/chartall.js"
 import './../../App.css';
 import "./../styles.css"
-import React from "react"
+import React, {useEffect, useState} from "react"
 import {  BrowserRouter, Route, Routes } from "react-router-dom"
 import { NavLink, useNavigate } from 'react-router-dom';
-function Home() {
+import axios from 'axios';
+const Home = () => {
+
+  const [data, setData] = useState([]);
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    // Get the token from your authentication system
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjMyNDU2MywiZXhwIjoxNjgyNTgzNzYzfQ.2RRqL8j5FTv0rfmHDcw-4Leqfn1WEjvY4aODBNAKXV4';
+    setToken(token);
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div className="body">
         <Navbar />
         <div className="container">
-          <div className="icon1" style={{marginBottom: '5px', background: "#33FF33"}}>
+           <div className="icon1" style={{marginBottom: '5px', background: "#33FF33"}}>
             <i className="bi bi-question-circle" />
             <i className="bi bi-gear" />
-            <h6>Hello user</h6>
+            <h6>Hello, {data.name}</h6>
             <NavLink to="/profile">
               <i className="bi bi-person" style={{ fontSize: "110%" }} />
             </NavLink>
-          </div>
+          </div> 
           <Routes>
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/light" element={<Light />} />
