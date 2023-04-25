@@ -155,8 +155,8 @@ export const ChartAll = () => {
                 </NavLink>
             </div>
         </div>
-        <div id="chart1" />;
-        <div id="chart2" />;
+        <div id="chart1" />
+        <div id="chart2" />
     </>
   ) 
 };

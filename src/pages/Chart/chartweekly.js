@@ -118,8 +118,8 @@ export const ChartWeekly = () => {
                 </NavLink>
             </div>
         </div>
-        <div id="chart1" />;
-        <div id="chart2" />;
+        <div id="chart1" />
+        <div id="chart2" />
     </>
   ) 
 };

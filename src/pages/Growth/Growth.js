@@ -4,8 +4,10 @@ import './Growth.css';
 
 function dtos() {
   var i = new Date()
-  return i.getDate() + "/" + i.getMonth() + " - " + i.getHours() + ":" + i.getMinutes()
+  return i.getDate() + "/" + (i.getMonth()+1) + " - " + i.getHours() + ":" + i.getMinutes()
 }
+
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NDY3OSwiZXhwIjoxNjgyNjEzODc5fQ.E5dbIzY5tXQmaq2EwI8KIEgLgXtYaeqTjqLq-1sxvs0"
 
 export default function Growth() {
   
@@ -14,24 +16,50 @@ export default function Growth() {
     {'date': "11/04 - 8:30", 'title': "Nhật ký chăm sóc cây", 'mess': "o luong 1 thay co sau"},
     {'date': "12/04 - 8:30", 'title': "Nhật ký chăm sóc cây", 'mess': "moi phun thuoc tru sau o luong 1"},
     {'date': "13/04 - 8:30", 'title': "Nhật ký chăm sóc cây", 'mess': "luong 2 la hoi vang"},
-    {'date': "14/04 - 8:30", 'title': "Nhật ký chăm sóc cây", 'mess': "tuoi phan bon la cho ca vuon"},
-    {'date': "15/04 - 8:30", 'title': "Nhật ký chăm sóc cây", 'mess': "thoi tiet nang gat, nhiet do cao, do am thap"},
   ])
   const [curDate, setDate] = useState(new Date())
   const [title, setTitle] = useState("Nhật ký chăm sóc cây")
   const [message, setMessage] = useState("null")
 
+  const fetchData = async () => {
+    let res = await fetch ('http://localhost:5000/dictionaries', {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    let resjson = await res.json()
+    console.log("dict list: ", resjson)
+    
+    var data = []
+    for(let i = 0; i < resjson.length; i++){
+      var tempdate = new Date(resjson[i].createAt)
+      tempdate = dtos(tempdate)
+      data.push({'date': tempdate,'title': resjson[i].title,'mess': resjson[i].content})
+    }
+    setDiary([...diary, ...data])
+  }
+
   useEffect(() => {
     setDate(new Date())
+    fetchData()
   }, [])
 
   const onSubmit = async () => {
-    diary.push({
-      'date': dtos(),
+    setDiary([...diary, {'date': dtos(curDate),'title': title,'mess': message}])
+    var body = {
       'title': title,
-      'message': message
+      'content': message
+    }
+    let res = await fetch('http://localhost:5000/dictionaries',{
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
     })
-    console.log(diary)
+    let resjson = await res.json()
+    console.log("Add dictinoaries: ", resjson)
   }
 
   return(
@@ -45,14 +73,14 @@ export default function Growth() {
           <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
         </div>
       </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card" style={{marginBottom: '20px'}}>
-              <div class="card-body">
-                <h6 class="card-title">Timeline</h6>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="card" style={{marginBottom: '20px'}}>
+              <div className="card-body">
+                <h6 className="card-title">Timeline</h6>
                 <div id="content">
-                  <ul class="timeline">
+                  <ul className="timeline">
                     {/* <li class="event" data-date="12:30 - 1:00pm">
                       <h3>Registration</h3>
                       <p>Get here on time, it's first come first serve. Be late, get turned away.</p>
@@ -70,7 +98,7 @@ export default function Growth() {
                       <p>See how is the victor and who are the losers. The big stage is where the winners bask in their own glory.</p>
                     </li> */}
                     {diary.map((i, index) => 
-                      <li class="event" id={index} data-date={i.date}>
+                      <li className="event" id={index} data-date={i.date}>
                         <h3>{i.title}</h3>
                         <p>{i.mess}</p>
                       </li>
@@ -85,20 +113,22 @@ export default function Growth() {
       <div className="msger-inputarea-container">
         <div className="msger-inputarea" style={{height: '8em'}}>
           <div style={{display: 'flex', flexDirection: 'column', width: '80%'}}>
-            <input type="text" style={{height: '30%'}} placeholder="Enter title"/>
-            <input type="text" className="msger-input" placeholder="Enter your notes..."/>
+            <input 
+              type="text"
+              style={{height: '30%'}}
+              placeholder="Enter title"
+              onChange={(e) => {setTitle(e.target.value)}} />
+            <input 
+              type="text"
+              className="msger-input"
+              placeholder="Enter your notes..."
+              onChange={(e) => {setMessage(e.target.value)}} />
           </div>
           <button type="button"
             className="msger-send-btn"
             style={{marginTop: '1.5em', marginBottom: '1.5em'}}
             onClick={() => {
-              console.log(diary)
-              diary.push({
-                'date': dtos(),
-                'title': title,
-                'message': message
-              })
-              // setDiary(diary)
+              onSubmit()
             }}>Add</button>
         </div>
       </div>
