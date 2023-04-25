@@ -7,7 +7,7 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const data = { gardenId: '64454b60b056956abb73c2c9' };
+    const data = { gardenId: gardenId };
 
     const response = await fetch('http://localhost:5000/devices/led', {
       method: 'POST',
@@ -15,6 +15,7 @@ function App() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjI1MzI4MiwiZXhwIjoxNjgyNTEyNDgyfQ.IxH9k5-v39b6p8rVEuWl6r1V2JXzPliRB6_gtQkR9nE`
       },
+      redirect: 'follow',
       body: JSON.stringify(data)
     });
 
