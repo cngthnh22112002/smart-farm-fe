@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import './Homepage.css';
+import { Chart } from '../Chart/Chart';
+
+const socket = io('http://localhost:5000');
+
+var curDate = new Date();
+
+export default function Homepage() {
+  const [light_sensor, setLightSensor] = useState('');
+  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
+  const [humidity_sensor, setHumiditySensor] = useState('');
+  const [temperature_sensor, setTemperatureSensor] = useState('');
+
+  useEffect(() => {
+    socket.on('light-sensor', (data) => {
+      setLightSensor(data);
+    });
+    socket.on('soilmoisture-sensor', (data) => {
+      setSoilmoistureSensor(data);
+    });
+    socket.on('humidity-sensor', (data) => {
+      setHumiditySensor(data);
+    });
+    socket.on('temperature-sensor', (data) => {
+      setTemperatureSensor(data);
+    });
+  }, []);
+
+  return (
+<>
+  <div className="title" style={{ marginLeft: 30, height: 50, marginBottom: 30 }}>
+    <div style={{ width: "80%", margin: 0, textAlign: "left"}}>
+      <h1>Home Page</h1>
+    </div>
+    <div className="title_2" style={{ height: 50 }}>
+      <div id="current-h">{curDate.getHours()} : {curDate.getMinutes()}</div>
+      <div id="current-d">{curDate.getDate()} : {curDate.getMonth() + 1} : {curDate.getFullYear()}</div>
+    </div>
+  </div>
+  <div className="container px-4">
+    <div className="row gx-5">
+    <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem", backgroundColor: "#FEEEDF"}}>
+          <p>Air temperature</p>
+          <p>{temperature_sensor} ℃</p>
+          <img src = "hinh1.png"></img>
+        </div>
+      </div>
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem", backgroundColor: "#BFF8FC !important"}}>
+          <p>Air humidity</p>
+          <p>{humidity_sensor} %</p>
+          <img src = "hinh2.png"></img>
+        </div>
+      </div>
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem", backgroundColor: "#FDFFA4 !important"}}>
+          <p>Light</p>
+          <p>{light_sensor} Cd</p>
+          <img src = "hinh3.png"></img>
+        </div>
+      </div>
+      <div className="col">
+        <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "12rem", width: "12rem", marginBottom: "0.5rem", backgroundColor: "#CDA4F6"}}>
+          <p>Soil moisture</p>
+          <p>{soilmoisture_sensor} %</p>
+          <img src = "hinh4.png"></img>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="equip">
+    <Chart />
+    {/* <div style={{margin: '10px'}}>
+      <iframe 
+        width="50%"
+        height='350px'
+        src="https://www.youtube.com/embed/r07l0qQZe4Y"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen />
+    </div>
+    <div style={{margin: '10px'}}>
+      <iframe 
+        width="50%"
+        height='350px'
+        src="https://www.youtube.com/embed/pXIw6pwx8zo"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen />
+    </div> */}
+  </div>
+</>
+
+  );
+  {/* // return (
+  //   <div>
+  //     <p>Message from light_sensor: {light_sensor}</p>
+  //     <p>Message from soilmoisture_sensor: {soilmoisture_sensor}</p>
+  //     <p>Message from humidity_sensor: {humidity_sensor}</p>
+  //     <p>Message from temperature_sensor: {temperature_sensor}</p>
+  //   </div>
+  // ); */}
+  }
