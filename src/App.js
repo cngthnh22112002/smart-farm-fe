@@ -1,36 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000');
+import { useState } from 'react';
+import React from 'react';
 
 function App() {
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
+  const [gardenId, setGardenId] = useState('');
 
-  useEffect(() => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const data = { gardenId: '64454b60b056956abb73c2c9' };
+
+    const response = await fetch('http://localhost:5000/devices/led', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjI1MzI4MiwiZXhwIjoxNjgyNTEyNDgyfQ.IxH9k5-v39b6p8rVEuWl6r1V2JXzPliRB6_gtQkR9nE`
+      },
+      body: JSON.stringify(data)
     });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-  }, []);
+
+    const result = await response.json();
+    console.log(result);
+  };
+
+  const handleInputChange = (event) => {
+    setGardenId(event.target.value);
+  };
 
   return (
-    <div>
-      <p>Message from light_sensor: {light_sensor}</p>
-      <p>Message from soilmoisture_sensor: {soilmoisture_sensor}</p>
-      <p>Message from humidity_sensor: {humidity_sensor}</p>
-      <p>Message from temperature_sensor: {temperature_sensor}</p>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Garden ID:
+        <input type="text" value={gardenId} onChange={handleInputChange} />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
   );
 }
 
