@@ -131,7 +131,7 @@ export default function Light() {
     socket.on('temperature-sensor', (data) => {
       setTemperatureSensor(data);
     });
-    socket.on('light', data => {setLight(data=="1" ? true : false);})
+    socket.on('led', data => {setLight(data=="1" ? true : false);})
     
     fetchData()
   }, []);
@@ -165,7 +165,7 @@ export default function Light() {
                   <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
                     <p>Light 1</p>
                     <input type="checkbox" className="button" id="light" checked={light} onChange={
-                      () => {setLight(!light); (light===true ? socket.emit("light", "0") : socket.emit("light", "1"))}
+                      () => {setLight(!light); (light===true ? socket.emit("led", "0") : socket.emit("led", "1"))}
                     }></input>
                   </div>
                 </div>
