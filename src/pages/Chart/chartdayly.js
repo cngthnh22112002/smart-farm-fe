@@ -12,11 +12,30 @@ export const ChartDayly = () => {
                 '05:20',
                 '06:20',
                 '07:20',
-                '08:20'])
-    const [data1, setData1] = useState([30, 20, 10, 40, 15, 25])
-    const [data2, setData2] = useState([50, 80, 90, 77, 95, 75])
-    const [data3, setData3] = useState([50, 20, 10, 40, 15, 25])
-    const [data4, setData4] = useState([30, 200, 100, 400, 150, 250])
+                '08:20',
+                '09:20',
+                '10:20',
+                '11:20',
+                '12:20',
+                '13:20',
+                '14:20',
+                '15:20',
+                '16:20',
+                '17:20',
+                '17:40',
+                '19:20',
+                '20:20',
+                '21:20',
+                '22:20',
+                '23:20',
+                '24:20',
+                '25:20',
+                '26:20',
+            ])
+    const [data1, setData1] = useState([30, 20, 10, 40, 15, 25,30, 20, 10, 40, 15, 25,30, 20, 10, 40, 15, 25,30, 20, 10, 40, 15, 25])
+    const [data2, setData2] = useState([50, 80, 90, 77, 95, 75,50, 80, 90, 77, 95, 75,50, 80, 90, 77, 95, 75,50, 80, 90, 77, 95, 75])
+    const [data3, setData3] = useState([50, 20, 10, 40, 15, 25,50, 20, 10, 40, 15, 25,50, 20, 10, 40, 15, 25,50, 20, 10, 40, 15, 25])
+    const [data4, setData4] = useState([30, 200, 100, 400, 150, 250,30, 200, 100, 400, 150, 250,30, 200, 100, 400, 150, 250,30, 200, 100, 400, 150, 250])
 
     React.useEffect(() => {
         c3.generate({
@@ -54,6 +73,9 @@ export const ChartDayly = () => {
             },
             line: {
                 connectNull: true
+            },
+            zoom: {
+                enabled: true
             }
         });
         c3.generate({
@@ -118,8 +140,8 @@ export const ChartDayly = () => {
                 </NavLink>
             </div>
         </div>
-        <div id="chart1" />;
-        <div id="chart2" />;
+        <div id="chart1" />
+        <div id="chart2" />
     </>
   ) 
 };
