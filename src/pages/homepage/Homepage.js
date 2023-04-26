@@ -41,16 +41,16 @@ export default function Homepage() {
 
     // lấy thông tin môi trường
     socket.on('light-sensor', (data) => {
-      setLightSensor(data.value);
+      setLightSensor(JSON.parse(data).value);
     });
     socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data.value);
+      setSoilmoistureSensor(JSON.parse(data).value);
     });
     socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data.value);
+      setHumiditySensor(JSON.parse(data).value);
     });
     socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data.value);
+      setTemperatureSensor(JSON.parse(data).value);
     });
   }
 

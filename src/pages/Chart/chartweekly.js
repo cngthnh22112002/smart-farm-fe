@@ -42,7 +42,7 @@ export const ChartWeekly = () => {
         let temjson = await tem.json()
         console.log("tem list ",temjson)
         
-        let humi = await fetch(url + 'airhumidity', {
+        let humi = await fetch(url + 'humidity', {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`

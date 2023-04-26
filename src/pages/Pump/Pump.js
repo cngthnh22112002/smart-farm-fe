@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import './Pump.css';
-import { ObjectId } from 'mongoose';
 
 const socket = io('http://localhost:5000');
 
@@ -120,16 +119,16 @@ export default function Pump() {
 
   useEffect(() => {
     socket.on('light-sensor', (data) => {
-      setLightSensor(data.value);
+      setLightSensor(JSON.parse(data).value);
     });
     socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data.value);
+      setSoilmoistureSensor(JSON.parse(data).value);
     });
     socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data.value);
+      setHumiditySensor(JSON.parse(data).value);
     });
     socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data.value);
+      setTemperatureSensor(JSON.parse(data).value);
     });
     socket.on('pump', data => {setPump(data=="1" ? true : false);})
     
