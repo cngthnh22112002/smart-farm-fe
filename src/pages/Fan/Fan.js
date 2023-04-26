@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 import './Fan.css';
+import { ObjectId } from 'mongoose';
 
 const socket = io('http://localhost:5000');
 
@@ -10,10 +12,10 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgw
 
 export default function Fan() {
   // 4 biến môi trường
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
+  const [light_sensor, setLightSensor] = useState('30');
+  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('31');
+  const [humidity_sensor, setHumiditySensor] = useState('32');
+  const [temperature_sensor, setTemperatureSensor] = useState('33');
 
   const [fan, setFan] = React.useState(false)         // lưu trạng thái đèn
   const [fanList, setFanList] = useState([[]])        // lưu danh sách đèn
@@ -33,88 +35,104 @@ export default function Fan() {
     console.log("gardens list: ", resjson)
     setGardenList(resjson)
 
+    // lấy danh sách đèn vườn đầu
+    setFanList([...arrNull,resjson[0].fans])
+
     // kết nối vườn đầu tiên khi mới vào trang
     var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + resjson[0]._id
-    let temp = await fetch(urlconnect, {
+    const temp = await fetch(urlconnect, {
       method: 'GET',
       headers: {
         "Authorization": `Bearer ${token}`
       },
     })
-    
-    // lấy thông tin môi trường
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-    socket.on('fan', data => {setFan(data=="1" ? true : false);})
+    const aaa = {
+      "gardenId": "64454b60b056956abb73c2c9",
+      "ledId": "64454b60b056956abb73c2cc",
+      "fanId": "64454b60b056956abb73c2cf",
+      "pumpId": "64454b60b056956abb73c2d2"
+    }
+    const temp2 = await fetch('http://localhost:5000/bridge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      redirect: 'follow',
+      body: JSON.stringify(aaa)
+    })
   }
 
   // lấy lại thông tin môi trường lúc đổi vườn
-  const getEnv = () => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-    socket.on('fan', data => {setFan(data=="1" ? true : false);})
-  }
+  // const getEnv = () => {
+  //   socket.close()
+  //   socket.on('light-sensor', (data) => {
+  //     setLightSensor(data);
+  //   });
+  //   socket.on('soilmoisture-sensor', (data) => {
+  //     setSoilmoistureSensor(data);
+  //   });
+  //   socket.on('humidity-sensor', (data) => {
+  //     setHumiditySensor(data);
+  //   });
+  //   socket.on('temperature-sensor', (data) => {
+  //     setTemperatureSensor(data);
+  //   });
+  //   socket.on('light', data => {setLight(data=="1" ? true : false);})
+  // }
 
   // đổi vườn, lấy danh sách đèn tương ứng
   const handleChooseGarden = async (e) => {
     setGarden(e.target.value)
     setFanList([...arrNull,gardenList[e.target.value].fans])
-    // disconnect garden
-    let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-    })
-    // connect new garden
-    var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
-    let temp2 = await fetch(urlconnect, {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-    })
-    getEnv()    // lấy lại thông tin môi trường
+    // // disconnect garden
+    // let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // // connect new garden
+    // var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
+    // let temp2 = await fetch(urlconnect, {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // getEnv()    // lấy lại thông tin môi trường
   }
 
-  const handleAddFan = async () => {
-    var res = {
-      "gardenId": gardenList[garden]._id
-    }
-    console.log("res: ", res)
-    console.log("index: ", garden)
-    let temp = await fetch('http://localhost:5000/devices/fan', {
-      method: 'POST',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(res)
-    })
-    let resjson = await temp.json()
-    console.log("Response: ", resjson)
-  }
+  const handleAddLed = async () => {
+      const data = { gardenId: gardenList[garden]._id };
+      const response = await fetch('http://localhost:5000/devices/fan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        redirect: 'follow',
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log(result);
+    };
 
   useEffect(() => {
+    socket.on('light-sensor', (data) => {
+      setLightSensor(data.value);
+    });
+    socket.on('soilmoisture-sensor', (data) => {
+      setSoilmoistureSensor(data.value);
+    });
+    socket.on('humidity-sensor', (data) => {
+      setHumiditySensor(data.value);
+    });
+    socket.on('temperature-sensor', (data) => {
+      setTemperatureSensor(data.value);
+    });
+    socket.on('fan', data => {setFan(data=="1" ? true : false);})
+    
     fetchData()
   }, []);
 
@@ -136,10 +154,7 @@ export default function Fan() {
                 <option key = {index} value = {index}>{t.name}</option>
               )}
             </select>
-            <button onClick={() => {
-              handleAddFan()
-              alert("Add success!")
-            }}>
+            <button onClick={() => handleAddLed()}>
               Add equipment
             </button>
           </div>
@@ -157,7 +172,7 @@ export default function Fan() {
                 {fanList[0].slice(1).map((t, index) => 
                   <div className="col" id={t}>
                     <div className="p-3 border bg-light" style={{ borderRadius: "10%", height: "6rem", width: "12rem", marginBottom: "0.5rem"}}>
-                      <p>Fan {index + 1}</p>
+                      <p>Fan {index + 2}</p>
                       <input type="checkbox" className="button" id="light" 
                         // checked={light}
                         // onChange={
