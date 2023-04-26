@@ -25,7 +25,8 @@ function NotifyToday() {
     //const token = tokenVar;
     // setToken(token);
     // alert(token)
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDZiYjAwYTMxYTdkMTBhYjQ3MzAyYSIsImlhdCI6MTY4MjQ0MDY3MCwiZXhwIjoxNjgyNjk5ODcwfQ.bWPBq0JMC9tiV7u98NGt4wPo_xSEnHbxi5w47QwLb_I";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjI1NTcwNSwiZXhwIjoxNjgyNTE0OTA1fQ.nVSu9MWmPAK40E2iy1ZkHkpMq7P0VnQSJlBJkQ9-5U4";
+    // setToken(localStorage.getItem('token'))
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/notification/today', {
@@ -46,7 +47,6 @@ function NotifyToday() {
         <div className='title'>
             <div className='left-div'>
                 <h1>Notification</h1>
-                <p>{token}</p>
             </div>
            
             <div className='right-div'>
@@ -130,8 +130,6 @@ function NotifyToday() {
                 ))}
             </div>
         </div>
-        {/* <div id="chart1" />;
-        <div id="chart2" />; */}
     </>
   );
 }
