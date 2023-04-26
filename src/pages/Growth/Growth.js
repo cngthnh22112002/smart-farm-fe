@@ -47,15 +47,17 @@ export default function Growth() {
 
   const onSubmit = async () => {
     setDiary([...diary, {'date': dtos(curDate),'title': title,'mess': message}])
-    var body = {
+    const body = {
       'title': title,
       'content': message
     }
     let res = await fetch('http://localhost:5000/dictionaries',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${token}`
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
+      redirect: 'follow',
       body: JSON.stringify(body)
     })
     let resjson = await res.json()

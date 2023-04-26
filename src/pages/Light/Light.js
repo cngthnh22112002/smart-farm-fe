@@ -12,10 +12,10 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgw
 
 export default function Light() {
   // 4 biến môi trường
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
+  const [light_sensor, setLightSensor] = useState('30');
+  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('31');
+  const [humidity_sensor, setHumiditySensor] = useState('32');
+  const [temperature_sensor, setTemperatureSensor] = useState('33');
 
   const [light, setLight] = React.useState(false)         // lưu trạng thái đèn
   const [lightList, setLightList] = useState([[]])        // lưu danh sách đèn
@@ -120,16 +120,16 @@ export default function Light() {
 
   useEffect(() => {
     socket.on('light-sensor', (data) => {
-      setLightSensor(data);
+      setLightSensor(data.value);
     });
     socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
+      setSoilmoistureSensor(data.value);
     });
     socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
+      setHumiditySensor(data.value);
     });
     socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
+      setTemperatureSensor(data.value);
     });
     socket.on('led', data => {setLight(data=="1" ? true : false);})
     

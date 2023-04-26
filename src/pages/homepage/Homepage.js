@@ -10,10 +10,10 @@ var curDate = new Date();
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2QwMzIyNDExYjgwN2ZmMjc3YzY1NCIsImlhdCI6MTY4MjM1NDY3OSwiZXhwIjoxNjgyNjEzODc5fQ.E5dbIzY5tXQmaq2EwI8KIEgLgXtYaeqTjqLq-1sxvs0"
 
 export default function Homepage() {
-  const [light_sensor, setLightSensor] = useState('');
-  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('');
-  const [humidity_sensor, setHumiditySensor] = useState('');
-  const [temperature_sensor, setTemperatureSensor] = useState('');
+  const [light_sensor, setLightSensor] = useState('30');
+  const [soilmoisture_sensor, setSoilmoistureSensor] = useState('31');
+  const [humidity_sensor, setHumiditySensor] = useState('32');
+  const [temperature_sensor, setTemperatureSensor] = useState('33');
 
   const [gardenList, setGardenList] = React.useState([])  // lưu danh sách vườn
   const [garden, setGarden] = useState("0")               // lưu index vườn đang chọn
@@ -41,34 +41,34 @@ export default function Homepage() {
 
     // lấy thông tin môi trường
     socket.on('light-sensor', (data) => {
-      setLightSensor(data);
+      setLightSensor(data.value);
     });
     socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
+      setSoilmoistureSensor(data.value);
     });
     socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
+      setHumiditySensor(data.value);
     });
     socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
+      setTemperatureSensor(data.value);
     });
   }
 
   // lấy lại thông tin môi trường lúc đổi vườn
-  const getEnv = () => {
-    socket.on('light-sensor', (data) => {
-      setLightSensor(data);
-    });
-    socket.on('soilmoisture-sensor', (data) => {
-      setSoilmoistureSensor(data);
-    });
-    socket.on('humidity-sensor', (data) => {
-      setHumiditySensor(data);
-    });
-    socket.on('temperature-sensor', (data) => {
-      setTemperatureSensor(data);
-    });
-  }
+  // const getEnv = () => {
+  //   socket.on('light-sensor', (data) => {
+  //     setLightSensor(data.value);
+  //   });
+  //   socket.on('soilmoisture-sensor', (data) => {
+  //     setSoilmoistureSensor(data.value);
+  //   });
+  //   socket.on('humidity-sensor', (data) => {
+  //     setHumiditySensor(data.value);
+  //   });
+  //   socket.on('temperature-sensor', (data) => {
+  //     setTemperatureSensor(data.value);
+  //   });
+  // }
 
   useEffect(() => {
     fetchData()
@@ -77,22 +77,22 @@ export default function Homepage() {
   // đổi vườn, lấy danh sách đèn tương ứng
   const handleChooseGarden = async (e) => {
     setGarden(e.target.value)
-    // disconnect garden
-    let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-    })
-    // connect new garden
-    var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
-    let temp2 = await fetch(urlconnect, {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-    })
-    getEnv()    // lấy lại thông tin môi trường
+    // // disconnect garden
+    // let temp1 = await fetch('http://localhost:5000/bridge/disconnect', {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // // connect new garden
+    // var urlconnect = 'http://localhost:5000/bridge/data?gardenId=' + gardenList[garden]._id
+    // let temp2 = await fetch(urlconnect, {
+    //   method: 'GET',
+    //   headers: {
+    //     "Authorization": `Bearer ${token}`
+    //   },
+    // })
+    // getEnv()    // lấy lại thông tin môi trường
   }
 
   return (
